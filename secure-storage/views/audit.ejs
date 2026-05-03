@@ -1,0 +1,46 @@
+<%- include('partials/header', { title: 'Audit Log' }) %>
+
+<div class="card shadow-sm">
+  <div class="card-header bg-warning d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">Audit Trail</span>
+    <span class="badge bg-dark"><%= logs.length %> entries (latest 500)</span>
+  </div>
+  <div class="card-body p-0">
+    <div style="max-height:78vh; overflow-y:auto">
+      <table class="table table-sm table-hover mb-0">
+        <thead class="table-light sticky-top">
+          <tr>
+            <th>Timestamp (UTC)</th>
+            <th>User</th>
+            <th>Action</th>
+            <th>Resource</th>
+            <th>IP</th>
+            <th>Status</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% logs.forEach(log => { %>
+          <tr class="<%= log.success ? '' : 'table-danger' %>">
+            <td><small><%= log.timestamp %></small></td>
+            <td><%= log.username || '—' %></td>
+            <td><code><%= log.action %></code></td>
+            <td><small><%= log.resource || '—' %></small></td>
+            <td><small><%= log.ip_address || '—' %></small></td>
+            <td>
+              <% if (log.success) { %>
+                <span class="badge bg-success">OK</span>
+              <% } else { %>
+                <span class="badge bg-danger">FAIL</span>
+              <% } %>
+            </td>
+            <td><small><%= log.details || '—' %></small></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,35 @@
+<%- include('partials/header', { title: 'Enable MFA' }) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white fw-semibold">Set Up Multi-Factor Authentication</div>
+      <div class="card-body text-center p-4">
+
+        <p>Scan this QR code with an authenticator app<br>
+           <small class="text-muted">(Google Authenticator, Authy, Microsoft Authenticator, etc.)</small>
+        </p>
+
+        <img src="<%= qrDataUrl %>" alt="TOTP QR Code" class="img-fluid mb-3" style="max-width:200px">
+
+        <p class="small text-muted mb-1">Or enter the key manually:</p>
+        <code class="d-block bg-light p-2 rounded mb-3" style="letter-spacing:.1em"><%= manualSecret %></code>
+
+        <hr>
+
+        <form method="POST" action="/confirm-mfa">
+          <label class="form-label fw-semibold">Enter the 6-digit code to confirm setup:</label>
+          <div class="input-group justify-content-center mb-3" style="max-width:200px; margin:auto">
+            <input type="text" name="code" class="form-control text-center"
+                   maxlength="6" pattern="\d{6}" placeholder="000000" required autofocus>
+          </div>
+          <button class="btn btn-success w-100">Activate MFA</button>
+        </form>
+
+        <a href="/" class="btn btn-link btn-sm mt-2">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,21 @@
+body {
+  background-color: #f5f6fa;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  letter-spacing: .03em;
+}
+
+.card {
+  border-radius: .5rem;
+}
+
+code {
+  font-size: .85em;
+}
+
+thead.sticky-top th {
+  top: 0;
+  z-index: 1;
+}

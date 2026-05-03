@@ -1,0 +1,105 @@
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<div class="row g-4">
+
+  <!-- File panel -->
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">
+          <%= user.role === 'admin' ? 'All Files (Admin View)' : 'My Files' %>
+        </span>
+        <span class="badge bg-light text-dark"><%= files.length %> file(s)</span>
+      </div>
+      <div class="card-body">
+
+        <!-- Upload form -->
+        <form method="POST" action="/upload" enctype="multipart/form-data" class="mb-3">
+          <div class="input-group">
+            <input type="file" name="file" class="form-control" required>
+            <button class="btn btn-success">Upload &amp; Encrypt</button>
+          </div>
+          <div class="form-text">Files are encrypted with AES-256-GCM before being written to disk.</div>
+        </form>
+
+        <hr>
+
+        <% if (files.length === 0) { %>
+          <p class="text-center text-muted py-3">No files yet. Upload your first file above.</p>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Filename</th>
+                  <th>Size</th>
+                  <th>Uploaded</th>
+                  <% if (user.role === 'admin') { %><th>Owner</th><% } %>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% files.forEach(f => { %>
+                <tr>
+                  <td><%= f.original_name %></td>
+                  <td><%= (f.file_size / 1024).toFixed(1) %> KB</td>
+                  <td><small><%= f.uploaded_at %></small></td>
+                  <% if (user.role === 'admin') { %><td><%= f.owner_name %></td><% } %>
+                  <td>
+                    <a href="/download/<%= f.id %>" class="btn btn-sm btn-outline-primary">Download</a>
+                    <form method="POST" action="/delete/<%= f.id %>" class="d-inline"
+                          onsubmit="return confirm('Delete this file permanently?')">
+                      <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security panel -->
+  <div class="col-lg-4">
+    <div class="card shadow-sm mb-3">
+      <div class="card-header bg-secondary text-white fw-semibold">Security Settings</div>
+      <div class="card-body">
+        <p class="fw-semibold mb-1">Multi-Factor Authentication (TOTP)</p>
+        <% if (user.mfa_enabled) { %>
+          <div class="alert alert-success py-2 small mb-2">MFA is active on this account.</div>
+          <form method="POST" action="/disable-mfa"
+                onsubmit="return confirm('Disable MFA? Your account will be less secure.')">
+            <button class="btn btn-warning btn-sm w-100">Disable MFA</button>
+          </form>
+        <% } else { %>
+          <div class="alert alert-warning py-2 small mb-2">MFA is not enabled.</div>
+          <a href="/setup-mfa" class="btn btn-success btn-sm w-100">Enable MFA</a>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-info">
+      <div class="card-body small text-muted">
+        <strong>Security posture</strong>
+        <ul class="mt-2 mb-0 ps-3">
+          <li>AES-256-GCM encryption (authenticated)</li>
+          <li>Per-file key via HKDF-SHA256</li>
+          <li>SHA-256 integrity check on download</li>
+          <li>bcrypt password hashing (cost 12)</li>
+          <li>All actions written to audit log</li>
+          <% if (user.mfa_enabled) { %>
+          <li class="text-success">TOTP MFA enabled</li>
+          <% } else { %>
+          <li class="text-danger">TOTP MFA not enabled</li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<%- include('partials/footer') %>

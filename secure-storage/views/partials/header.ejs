@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureVault - <%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<% if (sess.userId) { %>
+<nav class="navbar navbar-dark bg-dark px-3">
+  <span class="navbar-brand fw-bold">SecureVault</span>
+  <div class="d-flex align-items-center gap-2">
+    <span class="text-light small"><%= sess.username %> &mdash; <span class="badge bg-secondary"><%= sess.role %></span></span>
+    <% if (sess.role === 'admin') { %>
+      <a href="/audit" class="btn btn-outline-warning btn-sm">Audit Log</a>
+    <% } %>
+    <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+  </div>
+</nav>
+<% } %>
+
+<div class="container mt-4">
+  <% messages.forEach(m => { %>
+    <div class="alert alert-<%= m.type === 'error' ? 'danger' : 'success' %> alert-dismissible fade show" role="alert">
+      <%= m.msg %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% }) %>

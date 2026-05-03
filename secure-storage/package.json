@@ -1,0 +1,19 @@
+{
+  "name": "secure-storage",
+  "version": "1.0.0",
+  "description": "Secure file storage system with AES-256-GCM encryption and TOTP MFA",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "multer": "^2.0.0",
+    "qrcode": "^1.5.3",
+    "speakeasy": "^2.0.0",
+    "sql.js": "^1.12.0"
+  }
+}

@@ -1,0 +1,32 @@
+<%- include('partials/header', { title: 'Register' }) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="text-center mb-4">Create Account</h4>
+        <form method="POST" action="/register" autocomplete="off">
+          <div class="mb-3">
+            <label class="form-label">Username <small class="text-muted">(min 3 chars)</small></label>
+            <input type="text" name="username" class="form-control" required minlength="3" autofocus>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password <small class="text-muted">(min 8 chars)</small></label>
+            <input type="password" name="password" class="form-control" required minlength="8">
+          </div>
+          <button class="btn btn-success w-100">Create Account</button>
+        </form>
+        <p class="text-center mt-3 mb-0 small">
+          Have an account? <a href="/login">Login</a>
+        </p>
+      </div>
+    </div>
+    <div class="card mt-3 border-info">
+      <div class="card-body small text-muted">
+        <strong>Note:</strong> The first registered user automatically becomes <strong>admin</strong>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
